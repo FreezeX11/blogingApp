@@ -1,7 +1,5 @@
 package com.Backend.Backend.Dtos;
 
-import com.Backend.Backend.Entities.Favorites;
-import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 

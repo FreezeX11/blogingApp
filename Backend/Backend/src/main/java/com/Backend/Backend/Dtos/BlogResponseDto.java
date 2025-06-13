@@ -10,7 +10,7 @@ import java.util.Collection;
 public class BlogResponseDto {
     private Long id;
     private String content;
-    private BloggerResponseDto blogger;
+    private Long BloggerId;
     private Collection<BlogType> blogTypes;
     private Collection<Comment> comments;
     private Long like;

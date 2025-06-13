@@ -3,6 +3,7 @@ package com.Backend.Backend.Mappers;
 import com.Backend.Backend.Dtos.BlogCreationDto;
 import com.Backend.Backend.Dtos.BlogResponseDto;
 import com.Backend.Backend.Entities.Blog;
+import com.Backend.Backend.Entities.Blogger;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
@@ -13,11 +14,11 @@ import java.util.ArrayList;
 public class BlogMapper {
     private final BloggerMapper bloggerMapper;
 
-    public Blog toBlog(BlogCreationDto blogCreationDto) {
+    public Blog toBlog(Blogger blogger, BlogCreationDto blogCreationDto) {
         Blog blog = new Blog();
 
         blog.setContent(blogCreationDto.getContent());
-        blog.setBlogger(bloggerMapper.toBlogger(blogCreationDto.getBloggerResponseDto()));
+        blog.setBlogger(blogger);
         blog.setComments(new ArrayList<>());
         blog.setBlogTypes(blogCreationDto.getBlogTypes());
 
@@ -27,19 +28,22 @@ public class BlogMapper {
     public BlogResponseDto toBlogResponseDto(Blog blog) {
         BlogResponseDto blogResponseDto = new BlogResponseDto();
 
-        blogResponseDto.setBlogTypes(blog.getBlogTypes());
-        blogResponseDto.setBlogger(bloggerMapper.toBloggerResponseDto(blog.getBlogger()));
+        blogResponseDto.setId(blog.getId());
         blogResponseDto.setContent(blog.getContent());
-
+        blogResponseDto.setBloggerId(blog.getBlogger().getId());
+        blogResponseDto.setBlogTypes(blog.getBlogTypes());
+        blogResponseDto.setComments(blog.getComments());
+        blogResponseDto.setLike(blog.getLike());
+        
         return blogResponseDto;
     }
 
-    public Blog toBlog(BlogResponseDto blogResponseDto) {
+    public Blog toBlog(Blogger blogger, BlogResponseDto blogResponseDto) {
         Blog blog = new Blog();
 
         blog.setId(blogResponseDto.getId());
         blog.setContent(blogResponseDto.getContent());
-        blog.setBlogger(bloggerMapper.toBlogger(blogResponseDto.getBlogger()));
+        blog.setBlogger(blogger);
         blog.setComments(blogResponseDto.getComments());
         blog.setLike(blogResponseDto.getLike());
         blog.setBlogTypes(blogResponseDto.getBlogTypes());

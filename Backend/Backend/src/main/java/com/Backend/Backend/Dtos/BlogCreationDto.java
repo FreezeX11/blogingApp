@@ -14,5 +14,5 @@ public class BlogCreationDto {
     @NotBlank(message = "The content shouldn't be empty")
     private Collection<BlogType> blogTypes;
 
-    private BloggerResponseDto bloggerResponseDto;
+    private Long bloggerId;
 }
