@@ -19,13 +19,15 @@ public class BlogServices implements IBlogServices {
     private final ParentUserRepository parentUserRepository;
     private final BlogMapper blogMapper;
 
-    public void blogCreation(BlogCreationDto blogCreationDto) {
-        ParentUser user = parentUserRepository.findById(blogCreationDto.getBloggerId())
-                .orElseThrow(() -> new RuntimeException("User with id:" + blogCreationDto.getBloggerId() + "not found :-("));
+    public BlogResponseDto blogCreation(BlogRequestDto blogRequestDto) {
+        ParentUser user = parentUserRepository.findById(blogRequestDto.getBloggerId())
+                .orElseThrow(() -> new RuntimeException("User with id:" + blogRequestDto.getBloggerId() + "not found :-("));
 
-        if (user instanceof Blogger blogger) {
-            blogMapper.toBlogResponseDto(blogRepository.save(blogMapper.toBlog(blogger, blogCreationDto)));
+        if (!(user instanceof Blogger blogger)) {
+            throw new IllegalArgumentException("User is not a blogger and cannot create a blog.");
         }
+
+        return blogMapper.toBlogResponseDto(blogRepository.save(blogMapper.toBlog(blogger, blogRequestDto)));
     }
 
     public BlogResponseDto updateBlog(Long blogId, BlogRequestDto blogRequestDto) {
@@ -35,11 +37,15 @@ public class BlogServices implements IBlogServices {
         ParentUser user = parentUserRepository.findById(existingBlog.getBlogger().getId())
                 .orElseThrow(() -> new RuntimeException("User with id:" + existingBlog.getBlogger().getId() +"not found :-("));
 
-        if (user instanceof Blogger) {
-            existingBlog.setBlogTypes(blogRequestDto.getBlogTypes());
-            existingBlog.setContent(blogRequestDto.getContent());
+        if (!(user instanceof Blogger blogger)) {
+            throw new IllegalArgumentException("User is not a blogger.");
         }
-        return blogMapper.toBlogResponseDto(existingBlog);
+
+        existingBlog.setTitle(blogRequestDto.getTitle());
+        existingBlog.setBlogTypes(blogRequestDto.getBlogTypes());
+        existingBlog.setContent(blogRequestDto.getContent());
+
+        return blogMapper.toBlogResponseDto(blogRepository.save(existingBlog));
     }
 
     public void deleteBlog(Long blogId) {

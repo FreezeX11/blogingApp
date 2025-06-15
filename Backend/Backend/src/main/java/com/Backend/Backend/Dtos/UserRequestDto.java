@@ -5,10 +5,7 @@ import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 
 @Data
-public class BloggerRequestDto {
-    @NotNull(message = "ID can't not be null")
-    private Long id;
-
+public class UserRequestDto {
     @NotBlank(message = "Email should not be null")
     private String email;
 

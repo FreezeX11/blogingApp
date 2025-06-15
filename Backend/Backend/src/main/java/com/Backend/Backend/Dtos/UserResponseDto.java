@@ -4,7 +4,7 @@ import lombok.Data;
 
 
 @Data
-public class BloggerResponseDto {
+public class UserResponseDto {
     private Long id;
     private String username;
     private String email;

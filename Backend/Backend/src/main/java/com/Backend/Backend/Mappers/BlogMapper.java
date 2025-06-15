@@ -1,6 +1,6 @@
 package com.Backend.Backend.Mappers;
 
-import com.Backend.Backend.Dtos.BlogCreationDto;
+import com.Backend.Backend.Dtos.BlogRequestDto;
 import com.Backend.Backend.Dtos.BlogResponseDto;
 import com.Backend.Backend.Entities.Blog;
 import com.Backend.Backend.Entities.Blogger;
@@ -12,15 +12,16 @@ import java.util.ArrayList;
 @Service
 @AllArgsConstructor
 public class BlogMapper {
-    private final BloggerMapper bloggerMapper;
+    private final UserMapper userMapper;
 
-    public Blog toBlog(Blogger blogger, BlogCreationDto blogCreationDto) {
+    public Blog toBlog(Blogger blogger, BlogRequestDto blogRequestDto) {
         Blog blog = new Blog();
 
-        blog.setContent(blogCreationDto.getContent());
+        blog.setTitle(blogRequestDto.getTitle());
+        blog.setContent(blogRequestDto.getContent());
+        blog.setBlogTypes(blogRequestDto.getBlogTypes());
         blog.setBlogger(blogger);
         blog.setComments(new ArrayList<>());
-        blog.setBlogTypes(blogCreationDto.getBlogTypes());
 
         return blog;
     }
@@ -29,8 +30,9 @@ public class BlogMapper {
         BlogResponseDto blogResponseDto = new BlogResponseDto();
 
         blogResponseDto.setId(blog.getId());
+        blogResponseDto.setTitle(blog.getTitle());
         blogResponseDto.setContent(blog.getContent());
-        blogResponseDto.setBloggerId(blog.getBlogger().getId());
+        blogResponseDto.setUserResponseDto(userMapper.toUserResponseDto(blog.getBlogger()));
         blogResponseDto.setBlogTypes(blog.getBlogTypes());
         blogResponseDto.setComments(blog.getComments());
         blogResponseDto.setLike(blog.getLike());
@@ -38,17 +40,17 @@ public class BlogMapper {
         return blogResponseDto;
     }
 
-    public Blog toBlog(Blogger blogger, BlogResponseDto blogResponseDto) {
-        Blog blog = new Blog();
-
-        blog.setId(blogResponseDto.getId());
-        blog.setContent(blogResponseDto.getContent());
-        blog.setBlogger(blogger);
-        blog.setComments(blogResponseDto.getComments());
-        blog.setLike(blogResponseDto.getLike());
-        blog.setBlogTypes(blogResponseDto.getBlogTypes());
-
-        return blog;
-    }
+//    public Blog toBlog(Blogger blogger, BlogResponseDto blogResponseDto) {
+//        Blog blog = new Blog();
+//
+//        blog.setId(blogResponseDto.getId());
+//        blog.setContent(blogResponseDto.getContent());
+//        blog.setBlogger(blogger);
+//        blog.setComments(blogResponseDto.getComments());
+//        blog.setLike(blogResponseDto.getLike());
+//        blog.setBlogTypes(blogResponseDto.getBlogTypes());
+//
+//        return blog;
+//    }
 
 }

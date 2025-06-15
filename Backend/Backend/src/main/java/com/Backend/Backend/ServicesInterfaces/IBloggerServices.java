@@ -1,11 +1,11 @@
 package com.Backend.Backend.ServicesInterfaces;
 
 import com.Backend.Backend.Dtos.BloggerCreationDto;
-import com.Backend.Backend.Dtos.BloggerRequestDto;
-import com.Backend.Backend.Dtos.BloggerResponseDto;
+import com.Backend.Backend.Dtos.UserRequestDto;
+import com.Backend.Backend.Dtos.UserResponseDto;
 
 public interface IBloggerServices {
     void bloggerCreation(BloggerCreationDto bloggerCreationDto);
-    BloggerResponseDto updateBlogger(BloggerRequestDto bloggerRequestDto);
-    void deleteBlogger(Long bloggerId);
+    UserResponseDto updateBlogger(Long id, UserRequestDto userRequestDto);
+    void deleteBlogger(Long id);
 }

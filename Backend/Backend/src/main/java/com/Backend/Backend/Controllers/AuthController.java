@@ -1,13 +1,12 @@
 package com.Backend.Backend.Controllers;
 
-import com.Backend.Backend.Dtos.AdminDto;
 import com.Backend.Backend.Dtos.BloggerCreationDto;
-import com.Backend.Backend.Dtos.BloggerResponseDto;
+import com.Backend.Backend.Dtos.UserResponseDto;
 import com.Backend.Backend.Dtos.LoginRequestDto;
 import com.Backend.Backend.Entities.Admin;
 import com.Backend.Backend.Entities.Blogger;
 import com.Backend.Backend.Entities.ParentUser;
-import com.Backend.Backend.Mappers.BloggerMapper;
+import com.Backend.Backend.Mappers.UserMapper;
 import com.Backend.Backend.Repositories.ParentUserRepository;
 import com.Backend.Backend.Services.BloggerServices;
 import jakarta.validation.Valid;
@@ -29,7 +28,7 @@ public class AuthController {
     private AuthenticationManager authenticationManager;
     private final ParentUserRepository parentUserRepository;
     private final BloggerServices bloggerServices;
-    private final BloggerMapper bloggerMapper;
+    private final UserMapper userMapper;
 
 
     @PostMapping("/signup")
@@ -45,11 +44,11 @@ public class AuthController {
         authenticationManager.authenticate(authenticationRequest);
         ParentUser user = parentUserRepository.findByUsername(loginRequestDto.getUsername()).get();
         if(user instanceof Blogger blogger) {
-            BloggerResponseDto bloggerResponseDto = bloggerMapper.toBloggerResponseDto(blogger);
-            return new ResponseEntity<>(bloggerResponseDto, HttpStatus.OK);
+            UserResponseDto userResponseDto = userMapper.toUserResponseDto(blogger);
+            return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
         } else if (user instanceof Admin admin) {
-            AdminDto adminDto = bloggerMapper.toAdminDto(admin);
-            return new ResponseEntity<>(adminDto, HttpStatus.OK);
+            UserResponseDto userResponseDto = userMapper.toUserResponseDto(admin);
+            return new ResponseEntity<>(userResponseDto, HttpStatus.OK);
         }
         return new ResponseEntity<>("a problem has occurred", HttpStatus.FORBIDDEN);
     }

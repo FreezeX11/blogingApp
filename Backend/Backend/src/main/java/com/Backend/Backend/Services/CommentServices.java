@@ -1,9 +1,7 @@
 package com.Backend.Backend.Services;
 
-import com.Backend.Backend.Dtos.CommentCreationDto;
 import com.Backend.Backend.Dtos.CommentRequestDto;
 import com.Backend.Backend.Entities.Comment;
-import com.Backend.Backend.Mappers.BloggerMapper;
 import com.Backend.Backend.Mappers.CommentMapper;
 import com.Backend.Backend.Repositories.CommentRepository;
 import com.Backend.Backend.ServicesInterfaces.ICommentServices;
@@ -16,13 +14,13 @@ public class CommentServices implements ICommentServices {
     private final CommentRepository commentRepository;
     private final CommentMapper commentMapper;
 
-    public void addComment(CommentCreationDto commentCreationDto) {
-        commentRepository.save(commentMapper.toComment(commentCreationDto));
+    public void addComment(CommentRequestDto commentRequestDto) {
+        commentRepository.save(commentMapper.toComment(commentRequestDto));
     }
 
-    public void updateComment(CommentRequestDto commentRequestDto) {
-        Comment existingComment = commentRepository.findById(commentRequestDto.getId())
-                .orElseThrow(() -> new RuntimeException("Comment with id:" + commentRequestDto.getId() + "not found :-("));
+    public void updateComment(Long id, CommentRequestDto commentRequestDto) {
+        Comment existingComment = commentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Comment with id:" + id + "not found :-("));
 
         existingComment.setContent(commentRequestDto.getContent());
         commentRepository.save(existingComment);

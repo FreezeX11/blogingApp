@@ -15,9 +15,9 @@ public class BlogController {
     private final BlogServices blogServices;
 
     @PostMapping("/submit")
-    public ResponseEntity<Void> blogCreation(@Valid @RequestBody BlogCreationDto blogCreationDto) {
-        blogServices.blogCreation(blogCreationDto);
-        return new ResponseEntity<>(HttpStatus.CREATED);
+    public ResponseEntity<BlogResponseDto> blogCreation(@Valid @RequestBody BlogRequestDto blogRequestDto) {
+        BlogResponseDto blogResponseDto = blogServices.blogCreation(blogRequestDto);
+        return new ResponseEntity<>(blogResponseDto, HttpStatus.CREATED);
     }
 
     @PutMapping("/{id}")

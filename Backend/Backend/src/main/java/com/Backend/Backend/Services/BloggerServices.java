@@ -1,12 +1,12 @@
 package com.Backend.Backend.Services;
 
 import com.Backend.Backend.Dtos.BloggerCreationDto;
-import com.Backend.Backend.Dtos.BloggerRequestDto;
-import com.Backend.Backend.Dtos.BloggerResponseDto;
+import com.Backend.Backend.Dtos.UserRequestDto;
+import com.Backend.Backend.Dtos.UserResponseDto;
 import com.Backend.Backend.Entities.Blogger;
 import com.Backend.Backend.Entities.Favorites;
 import com.Backend.Backend.Entities.ParentUser;
-import com.Backend.Backend.Mappers.BloggerMapper;
+import com.Backend.Backend.Mappers.UserMapper;
 import com.Backend.Backend.Repositories.ParentUserRepository;
 import com.Backend.Backend.ServicesInterfaces.IBloggerServices;
 import lombok.AllArgsConstructor;
@@ -19,14 +19,14 @@ import java.util.ArrayList;
 @Service
 public class BloggerServices implements IBloggerServices {
     private final ParentUserRepository parentUserRepository;
-    private final BloggerMapper bloggerMapper;
+    private final UserMapper userMapper;
 
     public void bloggerCreation(BloggerCreationDto bloggerCreationDto) {
         String email = bloggerCreationDto.getEmail();
         String username = bloggerCreationDto.getUsername();
 
         if(!(parentUserRepository.findByEmail(email).isPresent() && parentUserRepository.findByUsername(username).isPresent())) {
-            Blogger blogger = bloggerMapper.toBlogger(bloggerCreationDto);
+            Blogger blogger = userMapper.toBlogger(bloggerCreationDto);
             blogger.setComments(new ArrayList<>());
             blogger.setBlogs(new ArrayList<>());
             blogger.setFavorites(new Favorites());
@@ -37,23 +37,23 @@ public class BloggerServices implements IBloggerServices {
 
     }
 
-    public BloggerResponseDto updateBlogger(BloggerRequestDto bloggerRequestDto) {
-        ParentUser user = parentUserRepository.findById(bloggerRequestDto.getId())
-                .orElseThrow(() -> new RuntimeException("User with id:" + bloggerRequestDto.getId() + "not found :-("));
+    public UserResponseDto updateBlogger(Long id, UserRequestDto userRequestDto) {
+        ParentUser user = parentUserRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User with id:" + id + "not found :-("));
         if (user instanceof Blogger blogger) {
-            blogger.setEmail(bloggerRequestDto.getEmail());
-            blogger.setUsername(bloggerRequestDto.getUsername());
-            blogger.setProfileImage(bloggerRequestDto.getProfileImage());
-            return bloggerMapper.toBloggerResponseDto(parentUserRepository.save(blogger));
+            blogger.setEmail(userRequestDto.getEmail());
+            blogger.setUsername(userRequestDto.getUsername());
+            blogger.setProfileImage(userRequestDto.getProfileImage());
+            return userMapper.toUserResponseDto(parentUserRepository.save(blogger));
         }
-        throw new RuntimeException("User with id:" + bloggerRequestDto.getId() + "is not a blogger :-(");
+        throw new RuntimeException("User with id:" + userRequestDto.getId() + "is not a blogger :-(");
     }
 
-    public void deleteBlogger(Long bloggerId) {
-        ParentUser user = parentUserRepository.findById(bloggerId)
-                .orElseThrow(() -> new RuntimeException("User with id:" + bloggerId + "not found :-("));
+    public void deleteBlogger(Long id) {
+        ParentUser user = parentUserRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User with id:" + id + "not found :-("));
         if (!(user instanceof Blogger blogger))
-            throw new RuntimeException("User with id:" + bloggerId + "is not a blogger :-(");
+            throw new RuntimeException("User with id:" + id + "is not a blogger :-(");
 
         parentUserRepository.delete(blogger);
     }

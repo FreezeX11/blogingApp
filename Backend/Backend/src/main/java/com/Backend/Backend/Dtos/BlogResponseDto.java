@@ -9,8 +9,9 @@ import java.util.Collection;
 @Data
 public class BlogResponseDto {
     private Long id;
+    private UserResponseDto userResponseDto;
+    private String title;
     private String content;
-    private Long BloggerId;
     private Collection<BlogType> blogTypes;
     private Collection<Comment> comments;
     private Long like;
