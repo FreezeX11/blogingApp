@@ -21,7 +21,6 @@ public class BlogMapper {
         blog.setContent(blogRequestDto.getContent());
         blog.setBlogTypes(blogRequestDto.getBlogTypes());
         blog.setBlogger(blogger);
-        blog.setComments(new ArrayList<>());
 
         return blog;
     }
@@ -39,18 +38,5 @@ public class BlogMapper {
         
         return blogResponseDto;
     }
-
-//    public Blog toBlog(Blogger blogger, BlogResponseDto blogResponseDto) {
-//        Blog blog = new Blog();
-//
-//        blog.setId(blogResponseDto.getId());
-//        blog.setContent(blogResponseDto.getContent());
-//        blog.setBlogger(blogger);
-//        blog.setComments(blogResponseDto.getComments());
-//        blog.setLike(blogResponseDto.getLike());
-//        blog.setBlogTypes(blogResponseDto.getBlogTypes());
-//
-//        return blog;
-//    }
 
 }

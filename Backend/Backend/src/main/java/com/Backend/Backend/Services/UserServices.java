@@ -17,7 +17,7 @@ import java.util.ArrayList;
 
 @AllArgsConstructor
 @Service
-public class BloggerServices implements IBloggerServices {
+public class UserServices implements IBloggerServices {
     private final ParentUserRepository parentUserRepository;
     private final UserMapper userMapper;
 
@@ -27,11 +27,10 @@ public class BloggerServices implements IBloggerServices {
 
         if(!(parentUserRepository.findByEmail(email).isPresent() && parentUserRepository.findByUsername(username).isPresent())) {
             Blogger blogger = userMapper.toBlogger(bloggerCreationDto);
-            blogger.setComments(new ArrayList<>());
-            blogger.setBlogs(new ArrayList<>());
             blogger.setFavorites(new Favorites());
 
             parentUserRepository.save(blogger);
+            return;
         }
         throw new DuplicateKeyException("An account is already associate with this credential!!!");
 
@@ -46,7 +45,7 @@ public class BloggerServices implements IBloggerServices {
             blogger.setProfileImage(userRequestDto.getProfileImage());
             return userMapper.toUserResponseDto(parentUserRepository.save(blogger));
         }
-        throw new RuntimeException("User with id:" + userRequestDto.getId() + "is not a blogger :-(");
+        throw new RuntimeException("User with id:" + id + "is not a blogger :-(");
     }
 
     public void deleteBlogger(Long id) {

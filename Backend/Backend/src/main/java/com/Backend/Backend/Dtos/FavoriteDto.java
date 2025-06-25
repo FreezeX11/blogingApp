@@ -4,7 +4,6 @@ import lombok.Data;
 
 @Data
 public class FavoriteDto {
-    private Long id;
     private Long blogId;
     private Long bloggerId;
 }

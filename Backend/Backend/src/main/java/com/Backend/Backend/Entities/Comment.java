@@ -20,5 +20,6 @@ public class Comment {
 
     private Date creationDate;
     private String content;
-    private Long like;
+    private Long like = 0L;
+    private Long dislike = 0L;
 }

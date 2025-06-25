@@ -6,6 +6,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 import java.util.Collection;
+import java.util.HashSet;
 
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
@@ -15,6 +16,11 @@ public class Favorites {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToMany
-    private Collection<Blog> blogCollection;
+    @ManyToMany(cascade = CascadeType.ALL)
+    @JoinTable(
+            name = "favorite_blogs",
+            joinColumns = @JoinColumn(name = "favorite_id"),
+            inverseJoinColumns = @JoinColumn(name = "blog_id")
+    )
+    private Collection<Blog> blogCollection = new HashSet<>();
 }

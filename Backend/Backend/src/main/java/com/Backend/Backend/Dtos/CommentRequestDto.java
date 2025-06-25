@@ -6,8 +6,11 @@ import lombok.Data;
 
 @Data
 public class CommentRequestDto {
-    @NotNull(message = "ID can't be null")
+    @NotNull(message = "Blogger ID can't be null")
     private Long bloggerId;
+
+    @NotNull(message = "Blogger ID can't be null")
+    private Long blogId;
 
     @NotBlank(message = "Comment content can't be null")
     private String content;

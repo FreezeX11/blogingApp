@@ -8,7 +8,7 @@ import com.Backend.Backend.Entities.Blogger;
 import com.Backend.Backend.Entities.ParentUser;
 import com.Backend.Backend.Mappers.UserMapper;
 import com.Backend.Backend.Repositories.ParentUserRepository;
-import com.Backend.Backend.Services.BloggerServices;
+import com.Backend.Backend.Services.UserServices;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -23,17 +23,17 @@ import org.springframework.web.bind.annotation.RestController;
 
 @AllArgsConstructor
 @RestController
-@RequestMapping("/api")
+@RequestMapping("/v1/auth")
 public class AuthController {
     private AuthenticationManager authenticationManager;
     private final ParentUserRepository parentUserRepository;
-    private final BloggerServices bloggerServices;
+    private final UserServices userServices;
     private final UserMapper userMapper;
 
 
     @PostMapping("/signup")
     public ResponseEntity<Void> signup(@Valid @RequestBody BloggerCreationDto bloggerCreationDto) {
-        bloggerServices.bloggerCreation(bloggerCreationDto);
+        userServices.bloggerCreation(bloggerCreationDto);
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 

@@ -5,6 +5,7 @@ import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -14,12 +15,23 @@ import java.util.Date;
 @Table(name = "Blogger")
 public class Blogger extends ParentUser {
 
-    @OneToMany(mappedBy = "blogger", cascade = CascadeType.ALL)
-    private Collection<Blog> blogs;
+    @OneToMany(
+            mappedBy = "blogger",
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    private Collection<Blog> blogs = new ArrayList<>();
 
-    @OneToOne(cascade = CascadeType.ALL, orphanRemoval = true)
+    @OneToOne(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "favorite_id")
     private Favorites favorites;
 
-    @OneToMany(mappedBy = "blogger", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Collection<Comment> comments;
+    @OneToMany(
+            mappedBy = "blogger",
+            cascade = CascadeType.ALL
+    )
+    private Collection<Comment> comments = new ArrayList<>();
 }
