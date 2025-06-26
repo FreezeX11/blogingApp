@@ -21,25 +21,10 @@ public class UserMapper {
         userResponseDto.setId(user.getId());
         userResponseDto.setUsername(user.getUsername());
         userResponseDto.setEmail(user.getEmail());
-        userResponseDto.setPassword(user.getPassword());
         userResponseDto.setProfileImage(user.getProfileImage());
 
         return userResponseDto;
     }
-
-    public UserResponseDto toUserResponseDto(ParentUser user, String token) {
-        UserResponseDto userResponseDto = new UserResponseDto();
-
-        userResponseDto.setId(user.getId());
-        userResponseDto.setToken(token);
-        userResponseDto.setUsername(user.getUsername());
-        userResponseDto.setEmail(user.getEmail());
-        userResponseDto.setProfileImage(user.getProfileImage());
-
-        return userResponseDto;
-    }
-
-
 
     public Blogger toBlogger(UserResponseDto userResponseDto) {
         Blogger blogger = new Blogger();
