@@ -37,11 +37,11 @@ public class AuthController {
         return new ResponseEntity<>(HttpStatus.CREATED);
     }
 
-    @PostMapping("/login")
+    @PostMapping("/signin")
     public ResponseEntity<?> login(@Valid @RequestBody LoginRequestDto loginRequestDto) {
         Authentication authenticationRequest = UsernamePasswordAuthenticationToken
                 .unauthenticated(loginRequestDto.getUsername(), loginRequestDto.getPassword());
-        authenticationManager.authenticate(authenticationRequest);
+        Authentication authentication = authenticationManager.authenticate(authenticationRequest);
         ParentUser user = parentUserRepository.findByUsername(loginRequestDto.getUsername()).get();
         if(user instanceof Blogger blogger) {
             UserResponseDto userResponseDto = userMapper.toUserResponseDto(blogger);

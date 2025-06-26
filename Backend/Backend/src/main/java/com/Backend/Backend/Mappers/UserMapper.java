@@ -6,11 +6,14 @@ import com.Backend.Backend.Dtos.UserResponseDto;
 import com.Backend.Backend.Entities.Blogger;
 import com.Backend.Backend.Entities.ParentUser;
 import lombok.AllArgsConstructor;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 @AllArgsConstructor
 @Service
 public class UserMapper {
+
+    private final PasswordEncoder passwordEncoder;
 
     public UserResponseDto toUserResponseDto(ParentUser user) {
         UserResponseDto userResponseDto = new UserResponseDto();
@@ -18,10 +21,25 @@ public class UserMapper {
         userResponseDto.setId(user.getId());
         userResponseDto.setUsername(user.getUsername());
         userResponseDto.setEmail(user.getEmail());
+        userResponseDto.setPassword(user.getPassword());
         userResponseDto.setProfileImage(user.getProfileImage());
 
         return userResponseDto;
     }
+
+    public UserResponseDto toUserResponseDto(ParentUser user, String token) {
+        UserResponseDto userResponseDto = new UserResponseDto();
+
+        userResponseDto.setId(user.getId());
+        userResponseDto.setToken(token);
+        userResponseDto.setUsername(user.getUsername());
+        userResponseDto.setEmail(user.getEmail());
+        userResponseDto.setProfileImage(user.getProfileImage());
+
+        return userResponseDto;
+    }
+
+
 
     public Blogger toBlogger(UserResponseDto userResponseDto) {
         Blogger blogger = new Blogger();
@@ -48,7 +66,7 @@ public class UserMapper {
 
         blogger.setUsername(bloggerCreationDto.getUsername());
         blogger.setEmail(bloggerCreationDto.getEmail());
-        blogger.setPassword(bloggerCreationDto.getPassword());
+        blogger.setPassword(passwordEncoder.encode(bloggerCreationDto.getPassword()));
         blogger.setProfileImage(bloggerCreationDto.getProfileImage());
 
         return blogger;
