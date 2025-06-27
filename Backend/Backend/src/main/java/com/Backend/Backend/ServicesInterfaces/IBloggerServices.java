@@ -4,8 +4,12 @@ import com.Backend.Backend.Dtos.BloggerCreationDto;
 import com.Backend.Backend.Dtos.UserRequestDto;
 import com.Backend.Backend.Dtos.UserResponseDto;
 
+import java.util.List;
+
 public interface IBloggerServices {
     void bloggerCreation(BloggerCreationDto bloggerCreationDto);
     UserResponseDto updateBlogger(Long id, UserRequestDto userRequestDto);
     void deleteAccount(Long id);
+    UserResponseDto getBlogger(Long id);
+    List<UserResponseDto> getBloggers();
 }

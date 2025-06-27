@@ -13,7 +13,7 @@ public class BlogResponseDto {
     private String title;
     private String content;
     private Collection<BlogType> blogTypes;
-    private Collection<Comment> comments;
+    private Collection<CommentResponseDto> comments;
     private Long like;
     private Long dislike;
 }

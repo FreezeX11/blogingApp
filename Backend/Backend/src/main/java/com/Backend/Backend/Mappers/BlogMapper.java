@@ -13,6 +13,7 @@ import java.util.ArrayList;
 @AllArgsConstructor
 public class BlogMapper {
     private final UserMapper userMapper;
+    private final CommentMapper commentMapper;
 
     public Blog toBlog(Blogger blogger, BlogRequestDto blogRequestDto) {
         Blog blog = new Blog();
@@ -33,7 +34,10 @@ public class BlogMapper {
         blogResponseDto.setContent(blog.getContent());
         blogResponseDto.setUserResponseDto(userMapper.toUserResponseDto(blog.getBlogger()));
         blogResponseDto.setBlogTypes(blog.getBlogTypes());
-        blogResponseDto.setComments(blog.getComments());
+        blogResponseDto.setComments(
+                blog.getComments().stream()
+                        .map(commentMapper::toCommentResponseDto)
+                        .toList());
         blogResponseDto.setLike(blog.getLike());
         blogResponseDto.setDislike(blog.getDislike());
         

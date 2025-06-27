@@ -11,9 +11,13 @@ import com.Backend.Backend.Repositories.ParentUserRepository;
 import com.Backend.Backend.ServicesInterfaces.IBloggerServices;
 import lombok.AllArgsConstructor;
 import org.springframework.dao.DuplicateKeyException;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @AllArgsConstructor
@@ -29,6 +33,7 @@ public class UserServices implements IBloggerServices {
         if(!(parentUserRepository.findByEmail(email).isPresent() && parentUserRepository.findByUsername(username).isPresent())) {
             Blogger blogger = userMapper.toBlogger(bloggerCreationDto);
             blogger.setFavorites(new Favorites());
+            blogger.setCreationDate(new Date());
 
             parentUserRepository.save(blogger);
             return;
@@ -54,7 +59,12 @@ public class UserServices implements IBloggerServices {
                 .orElseThrow(() -> new RuntimeException("User with id:" + id + "not found :-("));
         if (!(user instanceof Blogger blogger))
             throw new RuntimeException("User with id:" + id + "is not a blogger :-(");
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
 
+        if (!(blogger.getUsername().equals(userDetails.getUsername()))) {
+            throw new RuntimeException("It's not your account");
+        }
         parentUserRepository.delete(blogger);
     }
 

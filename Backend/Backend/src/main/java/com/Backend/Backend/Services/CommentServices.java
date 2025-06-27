@@ -15,6 +15,8 @@ import com.Backend.Backend.ServicesInterfaces.ICommentServices;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Date;
+
 @Service
 @AllArgsConstructor
 public class CommentServices implements ICommentServices {
@@ -34,6 +36,7 @@ public class CommentServices implements ICommentServices {
             throw new IllegalArgumentException("User is not a blogger and cannot create a blog.");
         } else {
             Comment comment = commentMapper.toComment(blogger, commentRequestDto);
+            comment.setCreationDate(new Date());
 
             blog.getComments().add(comment);
             blogRepository.save(blog);

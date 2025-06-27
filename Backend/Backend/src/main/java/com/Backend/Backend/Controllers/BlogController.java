@@ -41,7 +41,7 @@ public class BlogController {
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
-    @PostMapping("{id}/appreciate")
+    @PostMapping("/{id}/appreciate")
     public ResponseEntity<Void> appreciateBlog(
             @PathVariable Long id,
             @Valid @RequestBody BlogAppreciationDto blogAppreciationDto
@@ -55,12 +55,12 @@ public class BlogController {
         return new ResponseEntity<>(blogServices.getBlogs(), HttpStatus.OK);
     }
 
-    @GetMapping("{id}")
+    @GetMapping("/{id}")
     public ResponseEntity<BlogResponseDto> getBlog(@PathVariable Long id) {
         return new ResponseEntity<>(blogServices.getBlog(id), HttpStatus.OK);
     }
 
-    @GetMapping("{bloggerId}")
+    @GetMapping("/blogger/{bloggerId}")
     public ResponseEntity<List<BlogResponseDto>> getBlogByBlogger(@PathVariable Long bloggerId) {
         return new ResponseEntity<>(blogServices.getBlogsByBlogger(bloggerId), HttpStatus.OK);
     }
