@@ -20,7 +20,7 @@ public class BlogController {
     private final CommentServices commentServices;
     private final FavoriteServices favoriteServices;
 
-    @PostMapping("/submit")
+    @PostMapping
     public ResponseEntity<BlogResponseDto> blogCreation(@Valid @RequestBody BlogRequestDto blogRequestDto) {
         BlogResponseDto blogResponseDto = blogServices.blogCreation(blogRequestDto);
         return new ResponseEntity<>(blogResponseDto, HttpStatus.CREATED);
@@ -28,16 +28,16 @@ public class BlogController {
 
     @PutMapping("/{id}")
     public ResponseEntity<BlogResponseDto> updateBlog(
-            @PathVariable Long blogId,
+            @PathVariable Long id,
             @Valid @RequestBody BlogRequestDto blogRequestDto
     ) {
-        BlogResponseDto blogResponseDto = blogServices.updateBlog(blogId, blogRequestDto);
+        BlogResponseDto blogResponseDto = blogServices.updateBlog(id, blogRequestDto);
         return new ResponseEntity<>(blogResponseDto, HttpStatus.OK);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteBlog(@PathVariable Long blogId) {
-        blogServices.deleteBlog(blogId);
+    public ResponseEntity<Void> deleteBlog(@PathVariable Long id) {
+        blogServices.deleteBlog(id);
         return new ResponseEntity<>(HttpStatus.NO_CONTENT);
     }
 
@@ -48,6 +48,21 @@ public class BlogController {
     ) {
         blogServices.appreciateBlog(id, blogAppreciationDto);
         return new ResponseEntity<>(HttpStatus.OK);
+    }
+
+    @GetMapping
+    public ResponseEntity<List<BlogResponseDto>> getBlogs() {
+        return new ResponseEntity<>(blogServices.getBlogs(), HttpStatus.OK);
+    }
+
+    @GetMapping("{id}")
+    public ResponseEntity<BlogResponseDto> getBlog(@PathVariable Long id) {
+        return new ResponseEntity<>(blogServices.getBlog(id), HttpStatus.OK);
+    }
+
+    @GetMapping("{bloggerId}")
+    public ResponseEntity<List<BlogResponseDto>> getBlogByBlogger(@PathVariable Long bloggerId) {
+        return new ResponseEntity<>(blogServices.getBlogsByBlogger(bloggerId), HttpStatus.OK);
     }
 
     //Comment
@@ -102,10 +117,7 @@ public class BlogController {
 
     @GetMapping("/favorites/{favoriteId}")
     public ResponseEntity<List<BlogResponseDto>> getFavoriteBlogs(@PathVariable Long favoriteId) {
-        return new ResponseEntity<>(
-                favoriteServices.getFavoriteBlogs(favoriteId),
-                HttpStatus.OK
-        );
+        return new ResponseEntity<>(favoriteServices.getFavoriteBlogs(favoriteId), HttpStatus.OK);
     }
 
 }

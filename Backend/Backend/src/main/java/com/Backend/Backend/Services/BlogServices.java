@@ -82,4 +82,22 @@ public class BlogServices implements IBlogServices {
 
         blogRepository.save(existingBlog);
     }
+
+    public List<BlogResponseDto> getBlogs() {
+        return blogRepository.findAll().stream()
+                .map(blogMapper::toBlogResponseDto)
+                .toList();
+    }
+
+    public List<BlogResponseDto> getBlogsByBlogger(Long bloggerId) {
+        return blogRepository.findByBloggerId(bloggerId).stream()
+                .map(blogMapper::toBlogResponseDto)
+                .toList();
+    }
+
+    public BlogResponseDto getBlog(Long blogId) {
+        Blog existingBlog = blogRepository.findById(blogId)
+                .orElseThrow(() -> new RuntimeException("Blog with Id " + blogId + "doesn't exist"));
+        return blogMapper.toBlogResponseDto(existingBlog);
+    }
 }

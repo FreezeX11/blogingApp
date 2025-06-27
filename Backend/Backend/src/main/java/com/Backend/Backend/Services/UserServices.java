@@ -14,6 +14,7 @@ import org.springframework.dao.DuplicateKeyException;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.List;
 
 @AllArgsConstructor
 @Service
@@ -48,7 +49,7 @@ public class UserServices implements IBloggerServices {
         throw new RuntimeException("User with id:" + id + "is not a blogger :-(");
     }
 
-    public void deleteBlogger(Long id) {
+    public void deleteAccount(Long id) {
         ParentUser user = parentUserRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("User with id:" + id + "not found :-("));
         if (!(user instanceof Blogger blogger))
@@ -56,5 +57,26 @@ public class UserServices implements IBloggerServices {
 
         parentUserRepository.delete(blogger);
     }
+
+    public UserResponseDto getBlogger(Long id) {
+        ParentUser user = parentUserRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("User with id:" + id + "not found :-("));
+        if (!(user instanceof Blogger blogger))
+            throw new RuntimeException("User with id:" + id + "is not a blogger :-(");
+
+        return userMapper.toUserResponseDto(user);
+    }
+
+    public List<UserResponseDto> getBloggers() {
+        return parentUserRepository.findAll().stream()
+                .filter(user -> user instanceof Blogger)
+                .map(user -> (Blogger) user)
+                .map(userMapper::toUserResponseDto)
+                .toList(); // can be optimized
+    }
+
+//    public void updateUserStatus(Long userId, String status) {
+//
+//    }
 
 }

@@ -23,12 +23,14 @@ public class CustomUserDetailService implements UserDetailsService {
        UserDetails blogger = User.builder()
                     .username(user.getUsername())
                     .password(user.getPassword())
+                    .disabled(!(user.isEnabled()))
                     .authorities("USER")
                     .build();
 
        UserDetails admin = User.builder()
                     .username(user.getUsername())
                     .password(user.getPassword())
+                    .disabled(!(user.isEnabled()))
                     .authorities("USER", "ADMIN")
                     .build();
 

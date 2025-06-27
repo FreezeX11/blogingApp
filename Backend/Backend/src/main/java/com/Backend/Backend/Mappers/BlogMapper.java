@@ -35,6 +35,7 @@ public class BlogMapper {
         blogResponseDto.setBlogTypes(blog.getBlogTypes());
         blogResponseDto.setComments(blog.getComments());
         blogResponseDto.setLike(blog.getLike());
+        blogResponseDto.setDislike(blog.getDislike());
         
         return blogResponseDto;
     }

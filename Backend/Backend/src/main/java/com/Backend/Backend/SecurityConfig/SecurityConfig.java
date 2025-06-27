@@ -1,6 +1,7 @@
 package com.Backend.Backend.SecurityConfig;
 
 import com.Backend.Backend.SecurityConfig.JWT.AuthTokenFilter;
+import com.Backend.Backend.SecurityConfig.JWT.JwtUtils;
 import jakarta.annotation.Resource;
 import lombok.AllArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -31,17 +32,19 @@ public class SecurityConfig {
     private AuthenticationEntryPoint authenticationEntryPoint;
 
     @Bean
-    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager) throws Exception {
+    public SecurityFilterChain securityFilterChain(HttpSecurity http, AuthenticationManager authenticationManager, AuthTokenFilter authTokenFilter) throws Exception {
         return http
+                    .exceptionHandling(exception -> exception.authenticationEntryPoint(authenticationEntryPoint))
                     .sessionManagement((session) -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                     .csrf(AbstractHttpConfigurer::disable)
                     .authorizeHttpRequests((authorize) -> authorize
                             .requestMatchers("/v1/auth/**").permitAll()
+                            .requestMatchers("/h2-console/**").permitAll()
                             .requestMatchers("/error").permitAll()
                             .anyRequest().authenticated()
                     )
                 .authenticationManager(authenticationManager)
-                .addFilterBefore(authenticationTokenFilter(), UsernamePasswordAuthenticationFilter.class)
+                .addFilterBefore(authTokenFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();
     }
 
@@ -58,7 +61,7 @@ public class SecurityConfig {
     }
 
     @Bean
-    public AuthTokenFilter authenticationTokenFilter() {
-        return new AuthTokenFilter();
+    public AuthTokenFilter authenticationTokenFilter(JwtUtils jwtUtils, CustomUserDetailService customUserDetailService) {
+        return new AuthTokenFilter(jwtUtils, customUserDetailService);
     }
 }

@@ -21,6 +21,7 @@ public class Blog {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "blogger_id")
     private Blogger blogger;
 
     private String content;

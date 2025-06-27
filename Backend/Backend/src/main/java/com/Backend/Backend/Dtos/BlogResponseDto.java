@@ -15,4 +15,5 @@ public class BlogResponseDto {
     private Collection<BlogType> blogTypes;
     private Collection<Comment> comments;
     private Long like;
+    private Long dislike;
 }
