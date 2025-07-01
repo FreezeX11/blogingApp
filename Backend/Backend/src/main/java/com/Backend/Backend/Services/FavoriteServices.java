@@ -15,6 +15,7 @@ import jakarta.transaction.Transactional;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.util.Collection;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,7 +37,11 @@ public class FavoriteServices implements IFavoriteServices {
         if (!(user instanceof Blogger blogger)) {
             throw new IllegalArgumentException("User is not a blogger.");
         } else {
-            blogger.getFavorites().getBlogCollection().add(blog);
+            Collection<Blog> favoritesBlogs = blogger.getFavorites().getBlogCollection();
+            if (favoritesBlogs.contains(blog))
+                throw new IllegalArgumentException("Blog is already in the favorites.");
+
+            favoritesBlogs.add(blog);
             parentUserRepository.save(blogger);
         }
     }
@@ -48,12 +53,16 @@ public class FavoriteServices implements IFavoriteServices {
         Blog blog = blogRepository.findById(favoriteDto.getBlogId())
                 .orElseThrow(() -> new RuntimeException("Blog with id:" + favoriteDto.getBlogId() +"not found :-("));
 
-        if (!(user instanceof Blogger blogger)) {
+        if (!(user instanceof Blogger blogger))
             throw new IllegalArgumentException("User is not a blogger.");
-        } else {
-            blogger.getFavorites().getBlogCollection().remove(blog);
-            parentUserRepository.save(blogger);
-        }
+
+        Collection<Blog> favoritesBlogs = blogger.getFavorites().getBlogCollection();
+        if (!(favoritesBlogs.contains(blog)))
+            throw new IllegalArgumentException("Blog isn't in the favorites.");
+
+        blogger.getFavorites().getBlogCollection().remove(blog);
+        parentUserRepository.save(blogger);
+
     }
 
     @Transactional
