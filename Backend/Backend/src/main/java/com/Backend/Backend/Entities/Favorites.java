@@ -11,7 +11,7 @@ import java.util.HashSet;
 @Entity
 @Data @NoArgsConstructor @AllArgsConstructor
 @Table(name = "Favorites")
-public class Favorites {
+public class Favorites {    
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
