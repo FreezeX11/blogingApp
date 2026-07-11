@@ -62,6 +62,10 @@ public class AuthController {
                 userDetails.getUsername(),
                 authorities
         );
+
+
+
+        
         return new ResponseEntity<>(jwtResponseDto, HttpStatus.OK);
     }
 
