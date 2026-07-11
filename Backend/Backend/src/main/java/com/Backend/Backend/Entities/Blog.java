@@ -8,6 +8,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.CreationTimestamp;
 
+import java.util.ArrayList;
 import java.util.Collection;
 import java.util.Date;
 
@@ -20,9 +21,12 @@ public class Blog {
     private Long id;
 
     @ManyToOne
+    @JoinColumn(name = "blogger_id")
     private Blogger blogger;
 
     private String content;
+
+    private String title;
 
     @CreationTimestamp
     private Date creationDate;
@@ -32,9 +36,14 @@ public class Blog {
     @Enumerated(EnumType.STRING)
     Collection<BlogType> blogTypes;
 
-    @OneToMany(mappedBy = "blog", cascade = CascadeType.ALL, orphanRemoval = true)
-    private Collection<Comment> comments;
+    @OneToMany(
+            cascade = CascadeType.ALL,
+            orphanRemoval = true
+    )
+    @JoinColumn(name = "blog_id")
+    private Collection<Comment> comments = new ArrayList<>();
 
     private Long like = 0L;
+    private Long dislike = 0L;
 
 }

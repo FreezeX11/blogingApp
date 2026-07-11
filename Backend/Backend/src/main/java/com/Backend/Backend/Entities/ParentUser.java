@@ -18,4 +18,5 @@ public class ParentUser {
     private String email;
     private String password;
     private byte[] profileImage;
+    private boolean enabled = true;
 }
